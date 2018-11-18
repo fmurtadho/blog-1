@@ -1,5 +1,5 @@
 <template>
-  <div class="card z-depth-2 border border-dark">
+  <div v-if="article" class="card z-depth-2 border border-dark">
     <!-- Card Body -->
     <div class="card-body">
       <!-- Title -->
@@ -17,6 +17,8 @@
       <hr>
       <!-- {{article.data.location}} -->
       <google-map v-if="location" :place="location"></google-map>
+      <hr>
+      <youtube-accordion :location="location"/>
 
       <!-- Reply section -->
       <reply-card v-if="islogin" @trigger="updateArticle"></reply-card>
@@ -39,6 +41,7 @@
 import config from '@/config.js'
 
 import GoogleMap from '@/components/GoogleMap.vue'
+import YoutubeAccordion from '@/components/YoutubeAccordion.vue'
 
 import ReplyCard from '@/components/ReplyCard.vue'
 import CommentCard from '@/components/CommentCard.vue'
@@ -48,7 +51,8 @@ export default {
   components: {
     CommentCard,
     ReplyCard,
-    GoogleMap
+    GoogleMap,
+    YoutubeAccordion
   },
   props: ['islogin'],
   data () {
@@ -57,7 +61,8 @@ export default {
       comments: '',
       triggerevent: '',
       currentUser: localStorage.getItem('currentuser'),
-      location : ''
+      location : '',
+      videos : ''
     }
   },
   methods: {
@@ -72,6 +77,7 @@ export default {
           self.article = response.data
           self.location = self.article.data.location
           self.comments = self.article.data.comments
+          self.title = response.data.data.title
         })
         .catch((err) => {
           console.log(err)
