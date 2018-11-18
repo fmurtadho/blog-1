@@ -18,8 +18,9 @@
             <!-- Card body -->
             <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2" data-parent="#accordionEx">
                 <div class="card-body row d-flex flex-column justify-content-center">
-                    <router-link :to="{name : 'PostArticle'}" class="btn rgba-blue-strong"><i class="fas fa-pencil-alt"></i>&nbsp;Post Article</router-link>
-                    <router-link :to="{name : 'MyArticle'}" class="btn rgba-blue-strong"><i class="fas fa-list-ul"></i>&nbsp;My Article</router-link>
+                    <router-link :to="{name : 'PostArticle'}" class="btn rgba-blue-strong"><i class="fas fa-pencil-alt"></i>&nbsp;&nbsp;Post Article</router-link>
+                    <router-link :to="{name : 'MyArticle'}" class="btn rgba-blue-strong"><i class="fas fa-list-ul"></i>&nbsp;&nbsp;My Article</router-link>
+                    <router-link :to="{name : 'MyProfile'}" class="btn rgba-blue-strong"><i class="fas fa-user"></i>&nbsp;&nbsp;My Profile</router-link>
                 </div>
             </div>
 

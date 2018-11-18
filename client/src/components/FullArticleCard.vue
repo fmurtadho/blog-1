@@ -15,6 +15,8 @@
       <!-- Post Content -->
       <div v-html="article.data.content"></div>
       <hr>
+      <!-- {{article.data.location}} -->
+      <google-map v-if="location" :place="location"></google-map>
 
       <!-- Reply section -->
       <reply-card v-if="islogin" @trigger="updateArticle"></reply-card>
@@ -36,6 +38,8 @@
 <script>
 import config from '@/config.js'
 
+import GoogleMap from '@/components/GoogleMap.vue'
+
 import ReplyCard from '@/components/ReplyCard.vue'
 import CommentCard from '@/components/CommentCard.vue'
 
@@ -43,7 +47,8 @@ export default {
   name: 'completearticle',
   components: {
     CommentCard,
-    ReplyCard
+    ReplyCard,
+    GoogleMap
   },
   props: ['islogin'],
   data () {
@@ -51,7 +56,8 @@ export default {
       article: '',
       comments: '',
       triggerevent: '',
-      currentUser: localStorage.getItem('currentuser')
+      currentUser: localStorage.getItem('currentuser'),
+      location : ''
     }
   },
   methods: {
@@ -64,6 +70,7 @@ export default {
       })
         .then((response) => {
           self.article = response.data
+          self.location = self.article.data.location
           self.comments = self.article.data.comments
         })
         .catch((err) => {

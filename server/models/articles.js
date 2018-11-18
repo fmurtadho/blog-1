@@ -13,6 +13,21 @@ const articleSchema = new Schema({
     picture: {
         type: String
     },
+    location : {
+        name : {
+            type : String
+        },
+        lat : {
+            type : Number
+        },
+        lon : {
+            type : Number
+        }
+    },
+    views : {
+        type : Number,
+        default : 0
+    },
     category : { type: Schema.Types.ObjectId, ref: 'Category' },
     author : { type: Schema.Types.ObjectId, ref: 'User' },
     comments : [ {type: Schema.Types.ObjectId, ref: 'Comment'} ]

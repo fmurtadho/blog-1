@@ -11,6 +11,11 @@
             Title :
             <input type="text" class="form-control" rows="3" v-model="input_title">
             <br>
+            Location :
+            <br>
+            <input ref="autocomplete" :placeholder="input_place.name" class="search-location form-control" onfocus="value = ''" type="text" />
+            <p v-if="alert_place" :class="alert_place">{{alert_place_message}}</p>
+            <br>
             Content :
             <wysiwyg v-model="input_content"/>
             <br>
@@ -38,7 +43,11 @@ export default {
       new_image: '',
 
       input_category: '',
-      categories : ''
+      categories : '',
+
+      input_place : '',
+      alert_place : '',
+      alert_place_message : ''
     }
   },
   methods: {
@@ -78,36 +87,81 @@ export default {
           self.input_content = response.data.data.content
           self.new_image = response.data.data.picture
           self.input_category = response.data.data.category._id
+          self.input_place = response.data.data.location
         })
         .catch((err) => {
           console.log(err)
         })
     },
     submitArticle () {
-      
-      if (this.new_image !== this.input_image) {
-        let formdata = new FormData()
-        formdata.append('image', this.new_image)
+      if (!this.input_place.lat || !this.input_place.lon) {
+        this.alert_place = 'text-danger'
+        this.alert_place_message = '*invalid location'
+      } else {
+        this.alert_place = ''
+        this.alert_place_message = ''
 
-        axios.post(`${config.port}/articles/upload`, formdata, {
+        if (this.new_image !== this.input_image) {
+          let formdata = new FormData()
+          formdata.append('image', this.new_image)
 
-        })
-          .then((response) => {
-            let title = this.input_title
-            let content = this.input_content
-            let picture = response.data.link
-            let category = this.input_category
+          axios.post(`${config.port}/articles/upload`, formdata, {
 
-            let self = this
+            })
+            .then((response) => {
+              let title = this.input_title
+              let content = this.input_content
+              let picture = response.data.link
+              let category = this.input_category
+              let location = this.input_place
 
-            let data = {
-              title,
-              content,
-              picture,
-              category
-            }
+              let self = this
 
-            axios({
+              let data = {
+                title,
+                content,
+                picture,
+                category,
+                location
+              }
+
+              axios({
+                  method: 'PUT',
+                  url: `${config.port}/articles/${this.$route.params.articleId}`,
+                  headers: {
+                    token: localStorage.getItem('token')
+                  },
+                  data
+                })
+                .then((response) => {
+                  self.input_title = ''
+                  self.input_content = ''
+                  self.input_image = ''
+                  this.$router.push('/myarticle')
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+
+        } else if (this.input_image === this.new_image) {
+          let title = this.input_title
+          let content = this.input_content
+          let picture = this.input_image
+          let category = this.input_category
+          let location = this.input_place
+
+          let self = this
+
+          let data = {
+            title,
+            content,
+            picture,
+            category,
+            location
+          }
+
+          axios({
               method: 'PUT',
               url: `${config.port}/articles/${this.$route.params.articleId}`,
               headers: {
@@ -115,45 +169,15 @@ export default {
               },
               data
             })
-              .then((response) => {
-                self.input_title = ''
-                self.input_content = ''
-                self.input_image = ''
-                this.$router.push('/myarticle')
-              })
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      } else if (this.input_image === this.new_image) {
-        let title = this.input_title
-        let content = this.input_content
-        let picture = this.input_image
-        let category = this.input_category
-
-        let self = this
-
-        let data = {
-          title,
-          content,
-          picture,
-          category
+            .then((response) => {
+              self.input_title = ''
+              self.input_content = ''
+              self.input_image = ''
+              self.input_category = ''
+              self.input_place = ''
+              this.$router.push('/myarticle')
+            })
         }
-
-        axios({
-          method: 'PUT',
-          url: `${config.port}/articles/${this.$route.params.articleId}`,
-          headers: {
-            token: localStorage.getItem('token')
-          },
-          data
-        })
-          .then((response) => {
-            self.input_title = ''
-            self.input_content = ''
-            self.input_image = ''
-            this.$router.push('/myarticle')
-          })
       }
     },
     addImage (link) {
@@ -164,6 +188,25 @@ export default {
     this.checkToken()
     this.getValue()
     this.getCategories()
+
+    this.autocomplete = new google.maps.places.Autocomplete(
+      (this.$refs.autocomplete),
+      {types: ['geocode']}
+    );
+
+    this.autocomplete.addListener('place_changed', () => {
+      let place = this.autocomplete.getPlace();
+      let ac = place.address_components;
+      let lat = place.geometry.location.lat();
+      let lon = place.geometry.location.lng();
+      let city = ac[0]["short_name"];
+      this.input_place = {
+        name : place.formatted_address,
+        lat : lat,
+        lon : lon
+      }
+      console.log(this.input_place)
+    });
   },
   created () {
     this.checkToken()

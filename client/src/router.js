@@ -32,6 +32,11 @@ export default new Router({
           path : '/edit/:articleId',
           name : 'EditArticle',
           component: () => import(/* webpackChunkName: "about" */ './components/EditArticleCard.vue')
+        },
+        {
+          path : '/myprofile',
+          name : 'MyProfile',
+          component: () => import(/* webpackChunkName: "about" */ './components/MyProfile.vue')
         }
       ]
     },

@@ -9,7 +9,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <router-link to="/" class="nav-link" href="#">Home
                 <span class="sr-only">(current)</span>
               </router-link>
@@ -124,12 +124,13 @@ export default {
       let token = localStorage.getItem('token')
       if (token) {
         this.islogin = true
+        this.$emit('islogin-data', this.islogin)
       }
 
-      let admin = localStorage.getItem('admin')
-      if (admin === true) {
-        this.isadmin = true
-      }
+      // let admin = localStorage.getItem('admin')
+      // if (admin === true) {
+      //   this.isadmin = true
+      // }
     },
     register () {
       let self = this

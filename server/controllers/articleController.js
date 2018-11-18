@@ -16,7 +16,8 @@ class Controller {
                 content : req.body.content,
                 picture : req.body.picture,
                 category : req.body.category,
-                author : req.userData._id //ini diambil dari hasil cek token di middleware
+                author : req.userData._id, //ini diambil dari hasil cek token di middleware
+                location : req.body.location
             })
             .then((result)=>{
                 res.status(201).json({
@@ -55,8 +56,17 @@ class Controller {
         .populate('author')
         .populate({ path: "comments", populate: { path: "user" } })
         .then((result)=>{
-            res.status(200).json({
-                data : result
+            result.views = result.views + 1
+            result.save()
+            .then((done)=>{
+                res.status(200).json({
+                    data : result
+                })
+            })
+            .catch((err)=>{
+                res.status(500).json({
+                    message : 'Error Incrementing View Count'
+                })
             })
         })
         .catch((err)=>{
@@ -155,7 +165,8 @@ class Controller {
                 content : req.body.content,
                 picture : req.body.picture,
                 category : req.body.category,
-                author : req.userData._id
+                author : req.userData._id,
+                location : req.body.location
             },{
                 new : true
             })

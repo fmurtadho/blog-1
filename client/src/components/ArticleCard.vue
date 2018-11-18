@@ -5,6 +5,7 @@
             <h3 class="mb-3 font-weight-bold dark-grey-text">
                 <strong>{{article.title}}</strong>
             </h3>
+            <small><i class="fas fa-clock"></i> {{ article.createdAt | moment("dddd, MMMM Do YYYY") }} by <router-link :to="`/author/${article.author._id}`">{{article.author.name}}</router-link></small>
             <hr class="mb-1">
 
             <!--Grid row-->
@@ -35,7 +36,8 @@
             <!--Grid row-->
         </div>
         <div class="card-footer text-muted bg-white">
-            <i class="far fa-clock"></i> {{ article.createdAt | moment("dddd, MMMM Do YYYY") }} by <router-link :to="`/author/${article.author._id}`">{{article.author.name}}</router-link>
+            <i class="fa fa-eye"> {{article.views}}</i>&nbsp;
+            <i class="fa fa-map-marker-alt"> {{article.location.name}}</i>&nbsp;
         </div>
     </div>
 </template>
