@@ -1,6 +1,5 @@
 <template>
-    <!-- Comments Form -->
-    <div class="card my-4">
+    <div class="card">
         <div class="alert alert-primary" v-if="uploading === true" role="alert">
             Please wait while we post your article...
         </div>
@@ -10,7 +9,7 @@
         <div class="alert alert-danger" v-if="failed === true" role="alert">
             Upload Failed :(
         </div>
-        <h5 class="card-header">Post Article</h5>
+        <h5 class="card-header elegant-color lighten-3 text-white">Post Article</h5>
         <div class="card-body">
             <div class="form-group">
                 Picture :
@@ -27,8 +26,7 @@
                 Category :
                 <br>
                 <select v-model="input_category" name="Category">
-                    <option value="5bcd95e598b8c41a2c71af56">Funny</option>
-                    <option value="5bcd95e098b8c41a2c71af55">Serious</option>
+                    <option v-for="category in categories" :key="category._id" :value="category._id">{{category.name}}</option>
                 </select>
             </div>
             <button class="btn btn-primary" v-on:click="submitArticle()">Submit</button>
@@ -54,10 +52,24 @@ export default {
 
       uploading: false,
       success: false,
-      failed: false
+      failed: false,
+
+      categories : '',
     }
   },
   methods: {
+    getCategories (){
+      axios({
+        method : 'GET',
+        url : `${config.port}/categories`
+      })
+      .then(response=>{
+        this.categories = response.data
+      })
+      .catch(error=>{
+        console.log('error reading category list')
+      })
+    },
     checkToken () {
       let token = localStorage.getItem('token')
       this.token = token
@@ -118,9 +130,7 @@ export default {
   },
   mounted () {
     this.checkToken()
-  },
-  created () {
-    this.checkToken()
+    this.getCategories()
   },
   watch : {
     islogin : function(val) {

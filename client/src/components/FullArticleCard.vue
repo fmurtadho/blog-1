@@ -95,19 +95,19 @@ export default {
       if (token) {
         this.currentuser = localStorage.getItem('currentuser')
         this.token = token
-        this.islogin = true
+        // this.islogin = true
       } else {
-        this.islogin = false
+        // this.islogin = false
         this.currentuser = ''
       }
     }
   },
   created () {
-    this.getArticle(this.$route.params.articleId)
     this.checkToken()
   },
   mounted () {
     this.checkToken()
+    this.getArticle(this.$route.params.articleId)
   },
   watch: {
     triggerevent: function (val) {

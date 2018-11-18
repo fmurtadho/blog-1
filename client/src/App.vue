@@ -1,9 +1,9 @@
 <template>
-  <div id="app" class="cloudy-knoxville-gradient">
+  <div id="app">
     <!-- Navigation -->
     <navbar @trigger-change="triggerChange" @islogin-data="isLogin" @isadmin-data="isAdmin"></navbar>
     <!-- Content -->
-    <router-view :islogin="islogin"></router-view>
+    <router-view class="body" :islogin="islogin"></router-view>
   </div>
 </template>
 <style>
@@ -36,6 +36,11 @@ export default {
     }
   }
 }
-
 </script>
+<style>
+.body { 
+    padding-top: 65px; 
+}
+</style>
+
 

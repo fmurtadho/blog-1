@@ -17,14 +17,29 @@ export default new Router({
           path : 'article/:articleId',
           name : 'FullArticleCard',
           component: () => import(/* webpackChunkName: "about" */ './components/FullArticleCard.vue')
+        },
+        {
+          path : 'post',
+          name : 'PostArticle',
+          component: () => import(/* webpackChunkName: "about" */ './components/CreateArticleCard.vue')
+        },
+        {
+          path : 'myarticle',
+          name : 'MyArticle',
+          component: () => import(/* webpackChunkName: "about" */ './components/MyArticle.vue')
+        },
+        {
+          path : '/edit/:articleId',
+          name : 'EditArticle',
+          component: () => import(/* webpackChunkName: "about" */ './components/EditArticleCard.vue')
         }
       ]
     },
-    {
-      path: '/edit/:articleId',
-      name: 'editarticle',
-      component: () => import(/* webpackChunkName: "about" */ './views/EditArticle.vue')
-    },
+    // {
+    //   path: '/edit/:articleId',
+    //   name: 'editarticle',
+    //   component: () => import(/* webpackChunkName: "about" */ './views/EditArticle.vue')
+    // },
     {
       path : '/author/:authorId',
       name : 'AboutAuthor',
@@ -46,21 +61,5 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/MyProfile.vue')
     },
-    {
-      path: '/myarticle',
-      name: 'myarticle',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/MyArticle.vue')
-    },
-    {
-      path: '/create',
-      name: 'create',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/CreateArticle.vue')
-    }
   ]
 })

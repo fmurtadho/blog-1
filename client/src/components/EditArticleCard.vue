@@ -1,7 +1,6 @@
 <template>
-    <!-- Comments Form -->
-    <div class="card my-4">
-      <h5 class="card-header">Edit Article</h5>
+    <div class="card">
+      <h5 class="card-header elegant-color lighten-3 text-white">Edit Article</h5>
       <div class="card-body">
           <div class="form-group">
             Picture :
@@ -16,8 +15,7 @@
             <wysiwyg v-model="input_content"/>
             <br>
             <select v-model="input_category" name="Category">
-              <option value="5bcd95e598b8c41a2c71af56">Funny</option>
-              <option value="5bcd95e098b8c41a2c71af55">Serious</option>
+                <option v-for="category in categories" :key="category._id" :value="category._id">{{category.name}}</option>
             </select>
           </div>
           <button class="btn btn-primary" v-on:click="submitArticle()">Submit Update</button>
@@ -39,10 +37,23 @@ export default {
       input_image: '',
       new_image: '',
 
-      input_category: ''
+      input_category: '',
+      categories : ''
     }
   },
   methods: {
+    getCategories (){
+      axios({
+        method : 'GET',
+        url : `${config.port}/categories`
+      })
+      .then(response=>{
+        this.categories = response.data
+      })
+      .catch(error=>{
+        console.log('error reading category list')
+      })
+    },
     checkToken () {
       let token = localStorage.getItem('token')
       this.token = token
@@ -66,7 +77,7 @@ export default {
           self.input_title = response.data.data.title
           self.input_content = response.data.data.content
           self.new_image = response.data.data.picture
-          self.input_category = response.data.data.category
+          self.input_category = response.data.data.category._id
         })
         .catch((err) => {
           console.log(err)
@@ -152,6 +163,7 @@ export default {
   mounted () {
     this.checkToken()
     this.getValue()
+    this.getCategories()
   },
   created () {
     this.checkToken()

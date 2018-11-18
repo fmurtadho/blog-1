@@ -4,22 +4,25 @@
 
       <div class="row">
 
+        <!-- Sidebar -->
+        <div class="col-sm-12 col-md-4">
+          <div class="sticky-top sticky-offset mb-5">
+            <accordion-card class="my-4"/>
+            <search-widget @search-result="searchResult"></search-widget>
+            <categories-widget @category-result="categoryResult"></categories-widget>
+            <global-chat></global-chat>
+          </div>
+        </div>
+        <!-- Sidebar -->
+
         <!-- Blog Entries Column -->
         <div class="col-sm-12 col-md-8">
           <br>
           <article-card v-if="showArticles" v-for="(article, index) in articles" :key="index" :article="article"></article-card>
-          <router-view></router-view>
+          <router-view :islogin="islogin"></router-view>
+          <br>
         </div>
         <!-- Blog Entries Column -->
-
-
-        <!-- Sidebar -->
-        <div class="col-sm-12 col-md-4">
-          <search-widget @search-result="searchResult"></search-widget>
-          <categories-widget @category-result="categoryResult"></categories-widget>
-          <global-chat></global-chat>
-        </div>
-        <!-- Sidebar -->
 
       </div>
       <!-- /.row -->
@@ -38,18 +41,21 @@ import FullArticleCard from '@/components/FullArticleCard.vue'
 
 //SIDEBAR
 import SearchWidget from '@/components/SearchWidget.vue'
+import AccordionCard from '@/components/AccordionCard.vue'
 import CategoriesWidget from '@/components/CategoriesWidget.vue'
 import GlobalChat from '@/components/GlobalChat.vue'
 
 export default {
   name: 'home',
+  props : ['islogin'],
   components: {
     // Pagination,
     ArticleCard,
     SearchWidget,
     GlobalChat,
     CategoriesWidget,
-    FullArticleCard
+    FullArticleCard,
+    AccordionCard
   },
   data () {
     return {
@@ -89,8 +95,8 @@ export default {
         this.showArticles  = false
         this.showArticle = true
       }else{
+        this.getAllArticle()
         this.showArticles = true
-        // this.showArticle = false
       }
     },
     articles : function(val){
@@ -101,3 +107,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .sticky-offset {
+      top: 75px;
+  }
+</style>
+

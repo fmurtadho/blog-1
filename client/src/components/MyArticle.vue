@@ -1,14 +1,15 @@
 <template>
     <!-- Blog Post -->
     <div>
-        <div class="card mb-4" v-for="(article, index) in myarticle" :key="index">
+        <div class="card mb-4 z-depth-1" v-for="(article, index) in myarticle" :key="index">
             <!-- <img class="card-img-top" v-bind:src="article.picture" alt="Card image cap"> -->
+            <div class="card-header text-center elegant-color text-white">{{article.title}}</div>
             <div class="card-body">
-                <h2 class="card-title">{{article.title}}</h2>
-                <p class="card-text" v-html="article.content.slice(0, 150) + ' ...'"></p>
-                <router-link :to="`/article/${article._id}`" class="btn btn-primary ml-2">Read </router-link>
-                <router-link :to="`/edit/${article._id}`" class="btn btn-success ml-2">Edit </router-link>
-                <button @click="deleteArticle(article._id)" class="btn btn-danger ml-2">Delete </button>
+                <div class="row d-flex justify-content-center">
+                  <router-link :to="`/article/${article._id}`" class="btn btn-primary ml-2">Read </router-link>
+                  <router-link :to="`/edit/${article._id}`" class="btn btn-success ml-2">Edit </router-link>
+                  <button @click="deleteArticle(article._id)" class="btn btn-danger ml-2">Delete </button>
+                </div>
             </div>
             <div class="card-footer text-muted">
                 <div v-html="'Posted on ' + article.createdAt.slice(0, 10)"></div>
