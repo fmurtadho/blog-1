@@ -41,14 +41,12 @@ export default {
             window.open(`https://www.youtube.com/watch?v=${videoId}`)
         },
         getRelatedVideos() {
-            console.log('get related videos...')
 
             let self = this
             
             let title = self.location.name
             
             let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=3&q=${title}&key=`
-            console.log('url to go',url)
 
             axios({
                     method: 'GET',

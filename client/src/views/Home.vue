@@ -7,10 +7,10 @@
         <!-- Sidebar -->
         <div class="col-sm-12 col-md-4">
           <div class="sticky-top sticky-offset mb-5">
-            <accordion-card class="my-4"/>
+            <accordion-card v-if="islogin" class="my-4"/>
             <search-widget @search-result="searchResult"></search-widget>
             <categories-widget @category-result="categoryResult"></categories-widget>
-            <global-chat></global-chat>
+            <global-chat v-if="islogin"></global-chat>
           </div>
         </div>
         <!-- Sidebar -->

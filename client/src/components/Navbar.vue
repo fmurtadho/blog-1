@@ -17,17 +17,6 @@
             <li class="nav-item">
               <router-link :to="`/about`" class="nav-link" href="#">About</router-link>
             </li>
-            <!-- Dropdown -->
-            <li class="nav-item dropdown" v-if="islogin === true">
-              <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">Blog</a>
-              <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                <router-link :to="`/myprofile`" class="dropdown-item" href="">My Profile</router-link>
-                <router-link :to="`/myarticle`" class="dropdown-item" href="">My Article</router-link>
-                <router-link :to="`/create`" class="dropdown-item" href="">Post Article</router-link>
-              </div>
-            </li>
-            <!-- Dropdown -->
             <li class="nav-item" v-if="islogin === false" data-toggle="modal" data-target="#exampleModalCenter">
               <a class="nav-link" href="#">Login</a>
             </li>

@@ -5,7 +5,7 @@
             <h3 class="mb-3 font-weight-bold dark-grey-text">
                 <strong>{{article.title}}</strong>
             </h3>
-            <small><i class="fas fa-clock"></i> {{ article.createdAt | moment("dddd, MMMM Do YYYY") }} by <router-link :to="`/author/${article.author._id}`">{{article.author.name}}</router-link></small>
+            <small><i class="fas fa-clock"></i> {{ article.createdAt | moment("dddd, MMMM Do YYYY") }} by <router-link :to="{ name: 'AboutAuthor', params: { authorId: article.author._id } }">{{article.author.name}}</router-link></small>
             <hr class="mb-1">
 
             <!--Grid row-->
