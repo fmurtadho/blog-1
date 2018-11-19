@@ -9,7 +9,7 @@ router.get('/:id',userController.readOne)
 
 router.put('/update',middleware.authenticate,userController.update)
 
-router.put('/follow/:id',middleware.authenticate,userController.follow)
-router.put('/unfollow/:id',middleware.authenticate,userController.unfollow)
+router.post('/follow/:id',middleware.authenticate,userController.follow)
+router.post('/unfollow/:id',middleware.authenticate,userController.unfollow)
 
 module.exports = router

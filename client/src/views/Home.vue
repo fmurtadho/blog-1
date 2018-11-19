@@ -19,7 +19,7 @@
         <div class="col-sm-12 col-md-8">
           <br>
           <article-card v-if="showArticles" v-for="(article, index) in articles" :key="index" :article="article"></article-card>
-          <router-view :islogin="islogin"></router-view>
+          <router-view @full-article-card="hideArticles" :islogin="islogin"></router-view>
           <br>
         </div>
         <!-- Blog Entries Column -->
@@ -84,6 +84,9 @@ export default {
     },
     categoryResult (val) {
       this.articles = val
+    },
+    hideArticles(val){
+      this.showArticles = false
     }
   },
   created () {
@@ -91,19 +94,12 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      if(to.path !== '/'){
-        this.showArticles  = false
-        this.showArticle = true
-      }else{
-        this.getAllArticle()
+      if(this.$route.path !== '/'){
+        this.showArticles = false
+      }else if(this.$route.path === '/'){
         this.showArticles = true
       }
     },
-    articles : function(val){
-      // this.showArticle = false
-      this.$router.replace('/')
-      this.showArticles = true
-    }
   }
 }
 </script>

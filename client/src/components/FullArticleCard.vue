@@ -78,6 +78,8 @@ export default {
           self.location = self.article.data.location
           self.comments = self.article.data.comments
           self.title = response.data.data.title
+
+          self.$emit('full-article-card',response)
         })
         .catch((err) => {
           console.log(err)

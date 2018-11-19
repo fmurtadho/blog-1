@@ -142,6 +142,7 @@ class Controller {
     }
 
     static follow(req,res){
+        // console.log('follow controller',req.userId,req.params.id)
         User.findOneAndUpdate({
             _id : req.userId
         },{
@@ -152,7 +153,24 @@ class Controller {
             new : true
         })
         .then((updatedUser)=>{
-            res.status(200).json(updatedUser)
+            // res.status(200).json(updatedUser)
+            User.findOneAndUpdate({
+                _id : req.params.id
+            },{
+                $push : {
+                    followers : req.userId
+                }
+            },{
+                new : true
+            })
+            .then((updatedAuthor)=>{
+                res.status(200).json(updatedAuthor)
+            })
+            .catch((err)=>{
+                res.status(500).json({
+                    message : "Error in updating author followers"
+                })
+            })
         })
         .catch((err)=>{
             res.status(500).json({
@@ -162,6 +180,7 @@ class Controller {
     }
 
     static unfollow(req,res){
+        // console.log('unfollow controller',req.userId,req.params.id)
         User.findOneAndUpdate({
             _id : req.userId
         },{
@@ -172,7 +191,24 @@ class Controller {
             new : true
         })
         .then((updatedUser)=>{
-            res.status(200).json(updatedUser)
+            // res.status(200).json(updatedUser)
+            User.findOneAndUpdate({
+                _id : req.params.id
+            },{
+                $pull : {
+                    followers : req.userId
+                }
+            },{
+                new : true
+            })
+            .then((updatedAuthor)=>{
+                res.status(200).json(updatedAuthor)
+            })
+            .catch((err)=>{
+                res.status(500).json({
+                    message : "Error in updating author followers"
+                })
+            })
         })
         .catch((err)=>{
             res.status(500).json({

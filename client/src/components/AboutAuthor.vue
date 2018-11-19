@@ -1,8 +1,14 @@
 <template>
-    <div class="row d-flex justify-content-center">
+    <div v-if="author" class="row d-flex justify-content-center">
         <div class="col-sm-12 col-md-10 col-lg-8">
             <div class="card z-depth-2 border border-dark">
                 <div class="card-body">
+                    <p v-if="alert" :class="alert">
+                        {{alertMessage}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </p>
                     <div class="view overlay zoom">
                         <img class="card-img-top rounded" :src="author.avatar" style="max-height:400px">
                         <a href="#!">
@@ -19,6 +25,10 @@
                             {{author.bio}}
                         </p>
                     </div>
+                    <div class="card-footer d-flex justify-content-center">
+                        <div v-if="!follower" @click="follow" class="btn btn-danger">follow</div>
+                        <div v-if="follower" @click="unfollow" class="btn btn-danger">unfollow</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,7 +43,10 @@ export default {
   props: ['islogin'],
   data () {
     return {
-      author : ''
+      author : '',
+      follower : false,
+      alert : '',
+      alertMessage : ''
     }
   },
   methods: {
@@ -46,9 +59,55 @@ export default {
       })
         .then((response) => {
             this.author = response.data
+
+            let followers = this.author.followers
+
+            let currentuser = localStorage.getItem('currentuser')
+            for(let i = 0 ; i < followers.length ; i ++){
+                let follower = followers[i]._id.toString()
+                if(follower === currentuser){
+                    this.follower = true
+                    break;
+                }
+            }
         })
         .catch((err) => {
           console.log(err)
+        })
+    },
+    follow(){
+        axios({
+            method : 'POST',
+            url : `${config.port}/users/follow/${this.$route.params.authorId}`,
+            headers : {
+                token : localStorage.getItem('token')
+            }
+        })
+        .then((response)=>{
+            this.getProfile(this.$route.params.authorId)
+            this.alert = 'alert alert-info text-center'
+            this.alertMessage = `You are now following ${this.author.name}. You will receive an email every time ${this.author.name} publish new article.`
+            
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    },
+    unfollow(){
+        axios({
+            method : 'POST',
+            url : `${config.port}/users/unfollow/${this.$route.params.authorId}`,
+            headers : {
+                token : localStorage.getItem('token')
+            }
+        })
+        .then((response)=>{
+            this.alert = 'alert alert-info text-center'
+            this.alertMessage = `You unfollowed ${this.author.name}. You wouldn't receive an email every time ${this.author.name} publish new article anymore.`
+            this.follower = false
+        })
+        .catch((err)=>{
+            console.log(err)
         })
     }
   },
@@ -59,17 +118,4 @@ export default {
 </script>
 
 <style scoped>
-.container{
-    padding:5%;
-}
-.container .img{
-    text-align:center;
-}
-.container .details{
-    border-left:3px solid #ded4da;
-}
-.container .details p{
-    font-size:15px;
-    font-weight:bold;
-}
 </style>
