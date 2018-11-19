@@ -25,7 +25,7 @@
                             {{author.bio}}
                         </p>
                     </div>
-                    <div class="card-footer d-flex justify-content-center">
+                    <div v-if="footer" class="card-footer d-flex justify-content-center">
                         <div v-if="!follower" @click="follow" class="btn btn-danger">follow</div>
                         <div v-if="follower" @click="unfollow" class="btn btn-danger">unfollow</div>
                     </div>
@@ -46,7 +46,8 @@ export default {
       author : '',
       follower : false,
       alert : '',
-      alertMessage : ''
+      alertMessage : '',
+      footer : true
     }
   },
   methods: {
@@ -113,6 +114,9 @@ export default {
   },
   mounted () {
     this.getProfile(this.$route.params.authorId)
+    if(this.$route.params.authorId === localStorage.getItem('currentuser')){
+        this.footer = false
+    }
   }
 }
 </script>

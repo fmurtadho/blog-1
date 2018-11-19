@@ -9,14 +9,13 @@ function sendEmailTo(sender, recipients, articleId) {
         }
     });
 
-    // console.log(process.env.COMPANY_EMAIL,process.env.COMPANY_PASSWORD)
-
     let mailOptions = {
         from: process.env.COMPANY_EMAIL,
         to: recipients,
         subject: `New Article From ${sender}`,
         html: `    
-        <a href="http://localhost:8080/articles/${articleId}" target="blank">
+        <h3>New Article Form ${sender}</h3>
+        <a href="https://blog.fmurtadho.com/article/${articleId}" target="blank">
             Check This Out!
         </a>
         `

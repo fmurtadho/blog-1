@@ -98,6 +98,7 @@ export default {
         this.showArticles = false
       }else if(this.$route.path === '/'){
         this.showArticles = true
+        this.getAllArticle()
       }
     },
   }

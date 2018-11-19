@@ -38,11 +38,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
+            <p v-if="alertLogin" :class="alertLogin">{{alertLoginMessage}}</p>
             Email<br>
             <input type="text" v-model="login_email"><br>
             Password<br>
@@ -50,7 +51,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="signin()">Login</button>
+            <button type="button" class="btn btn-primary" @click="signin()">Login</button>
           </div>
         </div>
       </div>
@@ -68,6 +69,7 @@
             </button>
           </div>
           <div class="modal-body">
+            <p v-if="alertRegister" :class="alertRegister">{{alertRegisterMessage}}</p>
             Name<br>
             <input type="text" v-model="register_name"><br>
             Email<br>
@@ -77,7 +79,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="register()">Register</button>
+            <button type="button" class="btn btn-primary" @click="register()">Register</button>
           </div>
         </div>
       </div>
@@ -102,7 +104,13 @@ export default {
 
       register_name: '',
       register_email: '',
-      register_password: ''
+      register_password: '',
+
+      alertLogin : '',
+      alertLoginMessage : '',
+
+      alertRegister : '',
+      alertRegisterMessage : ''
     }
   },
   mounted () {
@@ -136,11 +144,12 @@ export default {
         data
       })
         .then((response) => {
-          console.log(response)
-          console.log(response.data)
+          self.alertRegister = 'alert alert-info'
+          self.alertRegisterMessage = `${response.data.message}`
         })
-        .catch((err) => {
-          console.log(err)
+        .catch((error) => {
+          self.alertRegister = 'alert alert-danger'
+          self.alertRegisterMessage = `${error.response.data.message}`
         })
     },
     signin () {
@@ -163,6 +172,14 @@ export default {
           self.login_email = ''
           self.login_password = ''
 
+          self.alertLogin = 'alert alert-info'
+          self.alertLoginMessage = 'Login Success'
+
+          setTimeout(function(){
+            self.alertLogin = ''
+            self.alertLoginMessage = ''
+          }, 2000);
+
         //   console.log(response.data.name)
 
           localStorage.setItem('token', response.data.token)
@@ -181,7 +198,9 @@ export default {
         })
         .catch(function (err) {
           self.failedLogin = true
-          console.log(err)
+          // console.log(err)
+          self.alertLogin = 'alert alert-danger'
+          self.alertLoginMessage = 'Login Failed'
         })
     },
     signout () {

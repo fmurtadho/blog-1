@@ -44,7 +44,7 @@ export default {
             
             let title = self.location.name
             
-            let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=3&q=${title}&key=`
+            let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=3&q=${title}&key=AIzaSyC_B-mxavIIiAFg37wDIrZjxcoeWfU3FTM`
 
             axios({
                     method: 'GET',
