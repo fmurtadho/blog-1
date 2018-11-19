@@ -12,7 +12,6 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body row d-flex justify-content-around">
                     <div class="col-md-4" v-for="(video,index) in videos" :key="index">
-                        
                         <div class="card" @click="openVid(video.id.videoId)" style="cursor:pointer">
                             <div class="card-header text-center">
                                 <small>{{video.snippet.title}}</small>
@@ -20,7 +19,6 @@
                             <div class="card-body row d-flex justify-content-center">
                                 <img :src="video.snippet.thumbnails.default.url">
                             </div>
-                            
                         </div>
                     </div>
                 </div>

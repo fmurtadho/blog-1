@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const Article = require('../models/articles')
 const jwt = require('jsonwebtoken')
 const Mongoose = require('mongoose');
 
@@ -11,6 +12,7 @@ class Middleware {
                     User.findById(decoded.userId)
                         .then(function (user) {
                             req.userData = user
+                            req.userId = user._id
                             next()
                         })
                 } else {
@@ -26,17 +28,26 @@ class Middleware {
         }
     }
 
-    //IS OWNER
-    // static isOwner(req,res,next){
-    //     const id = new Mongoose.Types.ObjectId(req.params.id)
+    static isOwner(req,res,next){
+        Article.findById(req.params.id)
+        .then((article)=>{
+            let articleAuthor = article.author.toString()
+            let userId = req.userId.toString()
 
-    //     User.find({'tablename' : {$in:id}})
-    //     .then(data =>{
-    //         if(data[0].id === req.id.toString()){
-    //             next()
-    //         }
-    //     })
-    // }
+            if(articleAuthor === userId){
+                next()
+            }else{
+                res.status(401).json({
+                    message : "Can't Modify Other User Article"
+                })
+            }
+        })
+        .catch((err)=>{
+            res.status(500).json({
+                message : `Can't find specified article`
+            })
+        })
+    }
 }
 
 module.exports = Middleware;

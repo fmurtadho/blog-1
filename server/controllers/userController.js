@@ -106,6 +106,8 @@ class Controller {
 
     static readOne(req,res){
         User.findById(req.params.id)
+        .populate('followers')
+        .populate('following')
         .then((data)=>{
             res.status(200).json(data)
         })
@@ -135,6 +137,46 @@ class Controller {
         .catch(function (err) {
             res.status(500).json({
                 message : 'update failed'
+            })
+        })
+    }
+
+    static follow(req,res){
+        User.findOneAndUpdate({
+            _id : req.userId
+        },{
+            $push : {
+                following : req.params.id
+            }
+        },{
+            new : true
+        })
+        .then((updatedUser)=>{
+            res.status(200).json(updatedUser)
+        })
+        .catch((err)=>{
+            res.status(500).json({
+                message : 'Error Follow User'
+            })
+        })
+    }
+
+    static unfollow(req,res){
+        User.findOneAndUpdate({
+            _id : req.userId
+        },{
+            $pull : {
+                following : req.params.id
+            }
+        },{
+            new : true
+        })
+        .then((updatedUser)=>{
+            res.status(200).json(updatedUser)
+        })
+        .catch((err)=>{
+            res.status(500).json({
+                message : "Error Unfollow User"
             })
         })
     }

@@ -8,8 +8,8 @@ router.post('/create',middleware.authenticate,articleController.create)
 router.get('/',articleController.read)
 router.get('/search',articleController.search)
 router.get('/:id',articleController.readOne)
-router.put('/:id',middleware.authenticate,articleController.update)
-router.delete('/:id',middleware.authenticate,articleController.delete)
+router.put('/:id',middleware.authenticate,middleware.isOwner,articleController.update)
+router.delete('/:id',middleware.authenticate,middleware.isOwner,articleController.delete)
 
 router.get('/bycategory/:id',articleController.byCategory)
 
