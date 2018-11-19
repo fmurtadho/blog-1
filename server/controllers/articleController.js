@@ -1,4 +1,6 @@
 const Article = require('../models/articles')
+const sendEmailTo = require('../helpers/sendEmailTo.js');
+const User = require('../models/users')
 
 class Controller {
     static create(req,res){
@@ -19,10 +21,37 @@ class Controller {
                 author : req.userData._id, //ini diambil dari hasil cek token di middleware
                 location : req.body.location
             })
-            .then((result)=>{
-                res.status(201).json({
-                    message : 'create article success',
-                    created : result
+            .then((article)=>{
+                User.findOne({
+                    _id : req.userId
+                })
+                .populate('followers')
+                .then((user)=>{
+                    if (user.followers.length > 0) {
+                        let recipients = [];
+
+                        for (let i = 0; i < user.followers.length; i++) {
+                            recipients.push(user.followers[i].email);
+                        }
+
+                        sendEmailTo(user.name, recipients, article._id);
+
+                        res.status(201).json({
+                            message : 'create article success',
+                            created : article
+                        })
+
+                    }else{
+                        res.status(201).json({
+                            message : 'create article success',
+                            created : article
+                        })
+                    }
+                })
+                .catch((err)=>{
+                    res.status(500).json({
+                        message : 'Error Populating User Followers Before Sending Email'
+                    })
                 })
             })
             .catch((err)=>{
