@@ -1,5 +1,6 @@
 const User = require('../models/users')
 const Article = require('../models/articles')
+const myComment = require('../models/comments')
 const jwt = require('jsonwebtoken')
 const Mongoose = require('mongoose');
 
@@ -45,6 +46,24 @@ class Middleware {
         .catch((err)=>{
             res.status(500).json({
                 message : `Can't find specified article`
+            })
+        })
+    }
+
+    static isCommentOwner(req,res,next){
+        myComment.findById(req.params.id)
+        .then((comment)=>{
+            if(comment.user.toString()===req.userId.toString()){
+                next()
+            }else{
+                res.status(401).json({
+                    message : `Can't delete other user comment`
+                })
+            }
+        })
+        .catch((err)=>{
+            res.status(500).json({
+                message : 'Error Reading Comment Data'
             })
         })
     }

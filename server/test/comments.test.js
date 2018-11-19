@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 describe('Article', function () {
 
     let token = ''
-    let id = ''
+    let commentId = ''
     let articleId = ''
 
     this.beforeAll('Add dummy user & article to database', function (done) {
@@ -59,8 +59,7 @@ describe('Article', function () {
         Article.deleteOne({
             _id: articleId
         })
-        .then((done) => {
-            console.log(done)
+        .then(() => {
             User.deleteOne({
                 email: 'testcomment@mail.com'
             })
@@ -71,6 +70,25 @@ describe('Article', function () {
     })
 
     describe('POST /comments/:articleId',function(){
+        it('post empty comment / invalid input | should return error 500',function(done){
+            chai
+            .request(app)
+            .post(`/comments/${articleId}`)
+            .set({
+                token : token
+            })
+            .send({
+                thecomment : ""
+            })
+            .end((err,res)=>{
+                expect(res).to.have.status(500)
+                expect(res.body).to.be.a('object')
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('Cannot post empty comment')
+                done()
+            })
+        })
+
         it('valid input | should post comment to specified article',function(done){
             chai
             .request(app)
@@ -82,6 +100,8 @@ describe('Article', function () {
                 thecomment : "Lorem Ipsum"
             })
             .end((err,res)=>{
+                commentId = res.body._id
+
                 expect(res).to.have.status(201)
                 expect(res.body).to.be.a('object')
                 expect(res.body).to.have.property('_id')
@@ -93,5 +113,38 @@ describe('Article', function () {
         })
     })
 
-
+    describe('DELETE comments/:commentId',function(){
+        it('invalid comment id parameter | should return 500 error reading comment data',function(done){
+            
+            chai
+            .request(app)
+            .delete(`/comments/666`)
+            .set({
+                token : token
+            })
+            .end((err,res)=>{
+                expect(res).to.have.status(500)
+                expect(res).to.be.a('object')
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('Error Reading Comment Data')
+                done()
+            })
+        })
+        
+        it('valid comment id parameter | should return 200 delete success',function(done){
+            chai
+            .request(app)
+            .delete(`/comments/${commentId}`)
+            .set({
+                token : token
+            })
+            .end((err,res)=>{
+                expect(res).to.have.status(200)
+                expect(res.body).to.be.a('object')
+                expect(res.body).to.have.property('message')
+                expect(res.body.message).to.equal('delete success')
+                done()
+            })
+        })
+    })
 }); //END TEST

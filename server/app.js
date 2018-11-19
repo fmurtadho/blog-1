@@ -12,8 +12,8 @@ const cors     = require('cors')
 require('dotenv').config()
 const app = express()
 
-// mongoose.connect(process.env.MY_LOCAL_MONGODB, {useNewUrlParser : true});
-mongoose.connect(process.env.MY_MLAB_MONGODB, { useNewUrlParser: true });
+mongoose.connect(process.env.MY_LOCAL_MONGODB, {useNewUrlParser : true});
+// mongoose.connect(process.env.MY_MLAB_MONGODB, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo failed to connect:'));

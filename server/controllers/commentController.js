@@ -38,14 +38,6 @@ class Controller {
         }
     }
 
-    static read(req,res){
-        
-    }
-
-    static readOne(req,res){
-
-    }
-
     static delete(req,res){
         myComment.findByIdAndDelete(req.params.id)
         .then(()=>{
