@@ -1,1 +1,1 @@
-# https://my-blog-engine-6bfb4.firebaseapp.com / blog.fmurtadho.com
+# https://my-blog-engine-6bfb4.firebaseapp.com / https://blog.fmurtadho.com
